@@ -2,7 +2,7 @@ function main
 %% Perform initialization
 
     k = 10;
-    N = 200;  % Number of iterations
+    N = 2000;  % Number of iterations
     steps = 1000; 
 
     % Repeat N times to get an average
