@@ -8,47 +8,6 @@ function main
     N = 2000;  % Number of iterations to run the bandit problem for averaging
     steps = 1000; % Number of time steps to run the bandit problem for
     
-%% Epsilon-greedy method
-    rewardFig = figure;
-    optFig = figure;
-    
-    for eps = [0, 0.01, 0.1]
-        
-       c = 0;
-       [reward, optimal] = iterateBandit(N, steps, eps, k, c);
-       
-       figure(rewardFig)
-       plot(reward)
-       hold on
-       
-       figure(optFig)
-       plot(optimal)
-       hold on
-    end
-    
-    % Plot formatting
-    figure(rewardFig)
-    xlabel("Steps")
-    ylabel("Average Reward")
-    title("Average Reward vs Number of Steps")
-    legend("eps = 0 (greedy)", "eps = 0.01", "eps = 0.1")
-    
-    figure(optFig)
-    xlabel("Steps")
-    ylabel("% Optimal Action")
-    title("% Optimal Action vs Number of Steps")
-    legend("eps = 0 (greedy)", "eps = 0.01", "eps = 0.1")
-    ylim([0, 1]);
-   
-    % Convert y-axis values to percentage values by multiplication
-    a=[cellstr(num2str(get(gca,'ytick')'*100))]; 
-    % Create a vector of '%' signs
-    pct = char(ones(size(a,1),1)*'%'); 
-    % Append the '%' signs after the percentage values
-    new_yticks = [char(a),pct];
-    % 'Reflect the changes on the plot
-    set(gca,'yticklabel',new_yticks)
-    
 %% UCB Method
 
     rewardFig = figure;
@@ -108,23 +67,8 @@ function[Rt, optimalAction] = banditProblem(eps, k, c, steps)
     optimalAction = [];
 
     for t = 1:1:steps
-
-        %[argval, argmax] = max(Q);
         
-        argmax = actionSelect(Q, c, t, N);
-
-        % Choose whether to do the greedy action or a random action
-        if c == 0
-            choice = binornd(1, 1-eps);
-        else
-            choice = 1;
-        end
-
-        if choice  % If the optimal action should be taken
-            A = argmax;
-        else  % Otherwise, the random action should be taken
-            A = randi([1, k]);
-        end
+        A = actionSelect(Q, c, t, N);
         
         if A == optArg
             optimalAction = [optimalAction; 1];
